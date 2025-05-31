@@ -25,10 +25,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update
+          sudo apt update && sudo apt upgrade
           sudo apt install dolphin # Install packages required by Dolphin
+          sudo apt install libxi-dev
 
-      - name: Install dependencies
+      - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install setuptools wheel
