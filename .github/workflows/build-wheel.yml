@@ -35,6 +35,7 @@ jobs:
           sudo apt install build-essential
           sudo apt install cmake
           sudo apt install git
+          sudo apt install g++-14
           # sudo apt install qt6-base-dev qt6-tools-dev
           sudo apt install libavcodec-dev
           sudo apt install libavformat-dev
