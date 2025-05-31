@@ -61,7 +61,7 @@ class CMakeBuild(build_ext):
                 # '-DUSE_SYSTEM_ZSTD=ON'
                 '-DUSE_SYSTEM_MINIZIP=OFF',
                 '-DENABLE_QT=0',
-                '-DBUILD_SHARED_LIBS=OFF'
+                '-DENABLE_LLVM=0'
             ]
 
             if platform.system() == 'Windows':
