@@ -16,6 +16,8 @@ for f in sys.argv:
 for f in cmake_cmd_args:
     sys.argv.remove(f)
 
+print(cmake_cmd_args)
+
 
 def _get_env_variable(name, default='OFF'):
     if name not in os.environ.keys():
@@ -57,7 +59,8 @@ class CMakeBuild(build_ext):
                 '-DPYTHON_EXECUTABLE={}'.format(sys.executable),
                 # '-DUSE_SYSTEM_LIBS=OFF'
                 # '-DUSE_SYSTEM_ZSTD=ON'
-                '-DUSE_SYSTEM_MINIZIP=OFF'
+                '-DUSE_SYSTEM_MINIZIP=OFF',
+                '-DENABLE_QT=0'
             ]
 
             if platform.system() == 'Windows':
