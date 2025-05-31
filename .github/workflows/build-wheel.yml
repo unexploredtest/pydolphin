@@ -35,6 +35,7 @@ jobs:
           sudo apt install build-essential
           sudo apt install cmake
           sudo apt install git
+          sudo apt install qt6-base-dev qt6-tools-dev
           sudo apt install libavcodec-dev
           sudo apt install libavformat-dev
           sudo apt install libcurl4-openssl-dev
@@ -87,7 +88,7 @@ jobs:
           sudo apt install libxcb-xkb-dev
           sudo apt install libxkbcommon-dev
           sudo apt install libxkbcommon-x11-dev
-          sudo apt install qt6-base-dev qt6-svg-dev qt6-widgets-dev qt6-gui-dev qt6-network-dev qt6-xml-dev qt6-printsupport-dev
+
 
       - name: Install python dependencies
         run: |
