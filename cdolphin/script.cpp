@@ -43,15 +43,6 @@ void freeDolphin(void* self) {
     }
 }
 
-// static int dolphinClear(PyObject *self) {
-//     std::cout << "xd?\n";
-//     PyDolphinModuleState* state = Py::GetState<PyDolphinModuleState>(self);
-//     state->~PyDolphinModuleState();
-//     return 0;
-// }
-
-// std::thread dolphinThread;
-
 // Run dolphin, for other functions to work a little has to pass before 
 // everything starts to function
 static PyObject* runDolphin(PyObject* self, PyObject* args) {
@@ -80,8 +71,6 @@ static PyObject* runDolphin(PyObject* self, PyObject* args) {
         }
         std::this_thread::sleep_for(std::chrono::seconds(10));
     }
-    // std::this_thread::sleep_for(std::chrono::seconds(10));
-    // run(gamePathS, saveStatePathS);
   
     return Py_None;
 }
@@ -198,14 +187,3 @@ PyMODINIT_FUNC PyInit__cdolphin(void) {
 
     return dolphinModule;
 }
-
-// static auto lol = PyScripting::getEventModule();
-// PyObject* child_module = PyModuleDef_Init(&lol);
-// if (!child_module) {
-//     Py_DECREF(dolphinModule);
-//     return nullptr;
-// }
-
-// PyObject* child_module = PyScripting::PyInit_event();
-
-// PyModule_AddObject(dolphinModule, "child", child_module);
