@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-24.04, ubuntu-24.04-arm, windows-latest, macos-latest]
+        os: [ubuntu-24.04, ubuntu-24.04-arm, macos-latest]
 
     steps:
       - name: Checkout code
@@ -78,13 +78,6 @@ jobs:
           sudo apt install libxcb-xkb-dev
           sudo apt install libxkbcommon-dev
           sudo apt install libxkbcommon-x11-dev
-
-      - name: Update windows sdk
-        if: matrix.os == 'windows-latest'
-        uses: Lamparter/Install-WindowsSdk@latest
-        with:
-          buildNumber: '22621'
-
 
       - uses: actions/setup-python@v5
         with:
