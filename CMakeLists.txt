@@ -15,10 +15,9 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 add_subdirectory(externals/dolphin)
 
-find_package(PkgConfig REQUIRED)
-find_package(X11 REQUIRED)
-
 if(ENABLE_X11)
+  find_package(PkgConfig REQUIRED)
+  find_package(X11 REQUIRED)
   pkg_check_modules(X11 x11 IMPORTED_TARGET)
   if(X11_FOUND)
     add_definitions(-DHAVE_X11=1)
