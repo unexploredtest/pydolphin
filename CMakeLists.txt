@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
 
-message("CHECK THIS: ${_ARCH_64} and ${CMAKE_SYSTEM_PROCESSOR}")
-
 project(cdolphin VERSION 0.1)
 
 set(CMAKE_C_STANDARD 99)
@@ -59,7 +57,7 @@ target_link_libraries(cdolphin PRIVATE ${Python3_LIBRARIES})
 
 target_include_directories(cdolphin PUBLIC ${DOLPHIN_CORE_PATH})
 
-if(X11_FOUND)
+if(ENABLE_X11 and X11_FOUND)
   target_sources(cdolphin PRIVATE ${DOLPHIN_NO_GUI_PATH}/PlatformX11.cpp)
   target_link_libraries(cdolphin PRIVATE PkgConfig::XRANDR PkgConfig::X11)
 endif()
