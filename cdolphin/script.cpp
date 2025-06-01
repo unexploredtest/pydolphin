@@ -38,7 +38,9 @@ void freeDolphin(void* self) {
     auto& dolphinThread = state->dolphinThread;
 
     if(dolphinThread.has_value() && dolphinThread.value().joinable()) {
-        stop();
+        if(getDolphinState() != DS_FINISHED) {
+            stop();
+        }
         dolphinThread.value().join();
     }
 }
@@ -51,11 +53,6 @@ static PyObject* runDolphin(PyObject* self, PyObject* args) {
     const char* saveStatePath;
     int headLess;
 
-    if(state->dolphinThread != std::nullopt && state->dolphinThread.value().joinable()) {
-        PyErr_SetString(PyExc_RuntimeError, "Dolphin already running!");
-        return nullptr;
-    }
-
     if (!PyArg_ParseTuple(args, "ssp", &gamePath, &saveStatePath, &headLess)) {
         PyErr_SetString(PyExc_RuntimeError, "Wrong parameters!");
     }
@@ -63,13 +60,19 @@ static PyObject* runDolphin(PyObject* self, PyObject* args) {
     std::string gamePathS(gamePath);
     std::string saveStatePathS(saveStatePath);
 
-    setHasPassed(false);
+    if(state->dolphinThread != std::nullopt && state->dolphinThread.value().joinable()) {
+        PyErr_SetString(PyExc_RuntimeError, "Dolphin already running!");
+        return nullptr;
+    }
+
+    if(getDolphinState() == DS_FINISHED) {
+        state->dolphinThread.value().join();
+    }
+
     state->dolphinThread = std::thread(run, gamePathS, saveStatePathS, headLess);
-    while(!getHasPassed()) {
-        if(!state->dolphinThread.value().joinable()) {
-            break;
-        }
-        std::this_thread::sleep_for(std::chrono::seconds(10));
+    
+    while(getDolphinState() == DS_INITING || getDolphinState() == DS_NONE) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
   
     return Py_None;
@@ -77,25 +80,22 @@ static PyObject* runDolphin(PyObject* self, PyObject* args) {
 
 static PyObject* stopDolphin(PyObject* self, PyObject* args) {
   PyDolphinModuleState* state = Py::GetState<PyDolphinModuleState>(self);
-  // Check if dolphin's thread is running at all.
   auto& optionalThread = state->dolphinThread;
-  bool isThereAThread = false;
-  if(optionalThread.has_value()) {
-    isThereAThread = true;
-  }
 
-  if (!isThereAThread ||  (isThereAThread && !optionalThread.value().joinable())) {
+  if(getDolphinState() == DS_NONE) {
       PyErr_SetString(PyExc_RuntimeError, "Dolphin not running!");
       return nullptr;
   }
   
-  if(getIsRunning()) {
+  if(getDolphinState() != DS_FINISHED) {
     stop();
   }
 
   // Wait until thread's work finishes
   optionalThread.value().join();
   optionalThread = std::nullopt;
+
+  setDolphinState(DS_NONE);
   
   return Py_None;
 }
@@ -103,7 +103,7 @@ static PyObject* stopDolphin(PyObject* self, PyObject* args) {
 // Check if dolphin is initilized, mustn't call right after the start
 // as a crash would happen.
 static PyObject* getIsRunningDolphin(PyObject* self, PyObject* args) {
-    return PyBool_FromLong(getIsRunning());
+    return PyBool_FromLong(getDolphinState() != DS_NONE);
 }
 
 

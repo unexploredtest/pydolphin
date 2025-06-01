@@ -35,23 +35,33 @@
 
 #include "VideoCommon/VideoBackendBase.h"
 
+#include "include/dolphin.hpp"
+
 static std::unique_ptr<Platform> s_platform;
-static bool hasPassed = false;
+static DolphinState dolphinState = DolphinState::DS_NONE;
+
+DolphinState getDolphinState() {
+  return dolphinState;
+}
+
+void setDolphinState(DolphinState state) {
+  dolphinState = state;
+}
+
+static void updateDolphinState() {
+  while(true) {
+    auto coreState = Core::GetState(Core::System::GetInstance());
+    if(coreState != Core::State::Running) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    } else {
+      setDolphinState(DS_RUNNING);
+      return;
+    }
+  }
+}
 
 void stop() {
   s_platform->Stop();
-}
-
-bool getHasPassed() {
-  return hasPassed;
-}
-
-void setHasPassed(bool value) {
-  hasPassed = value;
-}
-
-bool getIsRunning() {
-  return s_platform->IsRunning();
 }
 
 static void signal_handler(int)
@@ -222,6 +232,7 @@ static std::unique_ptr<Platform> GetPlatform(const optparse::Values& options, bo
 
 int run(std::string gamePath, std::string saveStatePath, bool headLess)
 {
+  setDolphinState(DS_INITING);
   int argc;
   char* argv[3];
   std::string exePath = "dolphinpy.exe";
@@ -364,15 +375,15 @@ int run(std::string gamePath, std::string saveStatePath, bool headLess)
 #ifdef USE_DISCORD_PRESENCE
   Discord::UpdateDiscordPresence();
 #endif
-
-  hasPassed = true;
+  std::thread checkDolphinTask = std::thread(updateDolphinState);
   s_platform->MainLoop();
-  hasPassed = false;
   Core::Stop(Core::System::GetInstance());
 
   Core::Shutdown(Core::System::GetInstance());
   s_platform.reset();
 
+  checkDolphinTask.join();
+  setDolphinState(DS_FINISHED);
   return 0;
 }
 
