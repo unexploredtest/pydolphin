@@ -98,65 +98,8 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: 'manylinux_2_28'
           CIBW_MANYLINUX_AARCH64_IMAGE: 'manylinux_2_28'
           CIBW_BEFORE_ALL_LINUX:  >
-            apt update && apt upgrade &&
-            apt install dolphin &&
-            apt install libxi-dev &&
-            apt install libegl1-mesa-dev &&
-            apt install ffmpeg &&
-            apt install libudev-dev &&
-            apt install libevdev-dev &&
-            apt install build-essential &&
-            apt install cmake &&
-            apt install git &&
-            apt install libavcodec-dev &&
-            apt install libavformat-dev &&
-            apt install libcurl4-openssl-dev &&
-            apt install libdbus-1-dev &&
-            apt install libglew-dev &&
-            apt install libgtk-3-dev &&
-            apt install libopenal-dev &&
-            apt install libreadline-dev &&
-            apt install libxrandr-dev &&
-            apt install libxi-dev &&
-            apt install libxinerama-dev &&
-            apt install libx11-dev &&
-            apt install libasound2-dev &&
-            apt install libpulse-dev &&
-            apt install libfreetype6-dev &&
-            apt install libfontconfig1-dev &&
-            apt install libpng-dev &&
-            apt install libjpeg-dev &&
-            apt install libz-dev &&
-            apt install libxext-dev &&
-            apt install libxrender-dev &&
-            apt install libglu1-mesa-dev &&
-            apt install libgtkglext1-dev &&
-            apt install libgtest-dev &&
-            apt install libgmp-dev &&
-            apt install liblz4-dev &&
-            apt install liblzma-dev &&
-            apt install libsnappy-dev &&
-            apt install libtinyxml2-dev &&
-            apt install libxi-dev &&
-            apt install libxrandr-dev &&
-            apt install libxinerama-dev &&
-            apt install libx11-xcb-dev &&
-            apt install libxcb-glx0-dev &&
-            apt install libxcb1-dev &&
-            apt install libxcb-dri3-dev &&
-            apt install libxcb-dri2-0-dev &&
-            apt install libxcb-xfixes0-dev &&
-            apt install libxcb-randr0-dev &&
-            apt install libxcb-keysyms1-dev &&
-            apt install libxcb-image0-dev &&
-            apt install libxcb-shape0-dev &&
-            apt install libxcb-xinerama0-dev &&
-            apt install libxcb-util-dev &&
-            apt install libxcb-icccm4-dev &&
-            apt install libxcb-keysyms1-dev &&
-            apt install libxcb-xkb-dev &&
-            apt install libxkbcommon-dev &&
-            apt install libxkbcommon-x11-dev
+            dnf update && dnf upgrade && dnf install dolphin && dnf install libxi-devel && dnf install mesa-libEGL-devel && dnf install ffmpeg && dnf install systemd-devel && dnf install libevdev-devel && dnf groupinstall "Development Tools" && dnf install cmake && dnf install git && dnf install libavcodec-devel && dnf install libavformat-devel && dnf install libcurl-devel && dnf install dbus-devel && dnf install glew-devel && dnf install gtk3-devel && dnf install openal-soft-devel && dnf install readline-devel && dnf install libXrandr-devel && dnf install libxi-devel && dnf install libXinerama-devel && dnf install libX11-devel && dnf install alsa-lib-devel && dnf install pulseaudio-libs-devel && dnf install freetype-devel && dnf install fontconfig-devel && dnf install libpng-devel && dnf install libjpeg-turbo-devel && dnf install zlib-devel && dnf install libXext-devel && dnf install libXrender-devel && dnf install mesa-libGLU-devel && dnf install gtkglext-devel && dnf install gtest-devel && dnf install gmp-devel && dnf install lz4-devel && dnf install xz-devel && dnf install snappy-devel && dnf install tinyxml2-devel && dnf install libxi-devel && dnf install libXrandr-devel && dnf install libXinerama-devel && dnf install libX11-xcb-devel && dnf install libxcb-glx-devel && dnf install libxcb-devel && dnf install libxcb-dri3-devel && dnf install libxcb-dri2-devel && dnf install libxcb-xfixes-devel && dnf install libxcb-randr-devel && dnf install libxcb-keysyms-devel && dnf install libxcb-image-devel && dnf install libxcb-shape-devel && dnf install libxcb-xinerama-devel && dnf install libxcb-util-devel && dnf install libxcb-icccm-devel && dnf install libxcb-keysyms-devel && dnf install libxcb-xkb-devel && dnf install libxkbcommon-devel && dnf install libxkbcommon-x11-devel
+
 
 
       - uses: actions/upload-artifact@v4
