@@ -94,9 +94,6 @@ jobs:
       - name: Build Wheel
         run: |
           python setup.py bdist_wheel
-        env:
-          CIBW_ARCHS: 'auto64'
-          CIBW_ARCHS_WINDOWS: 'AMD64'
 
       - name: Upload Wheel
         uses: actions/upload-artifact@v4
