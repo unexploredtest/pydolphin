@@ -48,7 +48,7 @@ void setDolphinState(DolphinState state) {
   dolphinState = state;
 }
 
-static void updateDolphinState() {
+static void chechDolphinRun() {
   while(true) {
     auto coreState = Core::GetState(Core::System::GetInstance());
     if(coreState != Core::State::Running) {
@@ -60,7 +60,7 @@ static void updateDolphinState() {
   }
 }
 
-void stop() {
+void stopDolphin() {
   s_platform->Stop();
 }
 
@@ -230,7 +230,7 @@ static std::unique_ptr<Platform> GetPlatform(const optparse::Values& options, bo
 #define main app_main
 #endif
 
-int run(std::string gamePath, std::string saveStatePath, bool headLess)
+int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess)
 {
   setDolphinState(DS_INITING);
   int argc;
@@ -375,7 +375,7 @@ int run(std::string gamePath, std::string saveStatePath, bool headLess)
 #ifdef USE_DISCORD_PRESENCE
   Discord::UpdateDiscordPresence();
 #endif
-  std::thread checkDolphinTask = std::thread(updateDolphinState);
+  std::thread checkDolphinTask = std::thread(chechDolphinRun);
   s_platform->MainLoop();
   Core::Stop(Core::System::GetInstance());
 

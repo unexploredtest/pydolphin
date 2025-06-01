@@ -39,7 +39,7 @@ void freeDolphin(void* self) {
 
     if(dolphinThread.has_value() && dolphinThread.value().joinable()) {
         if(getDolphinState() != DS_FINISHED) {
-            stop();
+            stopDolphin();
         }
         dolphinThread.value().join();
     }
@@ -47,7 +47,7 @@ void freeDolphin(void* self) {
 
 // Run dolphin, for other functions to work a little has to pass before 
 // everything starts to function
-static PyObject* runDolphin(PyObject* self, PyObject* args) {
+static PyObject* run(PyObject* self, PyObject* args) {
     PyDolphinModuleState* state = Py::GetState<PyDolphinModuleState>(self);
     const char* gamePath;
     const char* saveStatePath;
@@ -69,7 +69,7 @@ static PyObject* runDolphin(PyObject* self, PyObject* args) {
         state->dolphinThread.value().join();
     }
 
-    state->dolphinThread = std::thread(run, gamePathS, saveStatePathS, headLess);
+    state->dolphinThread = std::thread(runDolphin, gamePathS, saveStatePathS, headLess);
     
     while(getDolphinState() == DS_INITING || getDolphinState() == DS_NONE) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -78,7 +78,7 @@ static PyObject* runDolphin(PyObject* self, PyObject* args) {
     return Py_None;
 }
 
-static PyObject* stopDolphin(PyObject* self, PyObject* args) {
+static PyObject* stop(PyObject* self, PyObject* args) {
   PyDolphinModuleState* state = Py::GetState<PyDolphinModuleState>(self);
   auto& optionalThread = state->dolphinThread;
 
@@ -88,7 +88,7 @@ static PyObject* stopDolphin(PyObject* self, PyObject* args) {
   }
   
   if(getDolphinState() != DS_FINISHED) {
-    stop();
+    stopDolphin();
   }
 
   // Wait until thread's work finishes
@@ -109,8 +109,8 @@ static PyObject* getIsRunningDolphin(PyObject* self, PyObject* args) {
 
 // Method table
 static PyMethodDef DolphinMethods[] = {
-    {"run", runDolphin, METH_VARARGS, "Run dolphin"},
-    {"stop", stopDolphin, METH_NOARGS, "Stop dolphin"},
+    {"run", run, METH_VARARGS, "Run dolphin"},
+    {"stop", stop, METH_NOARGS, "Stop dolphin"},
     {"check_init", getIsRunningDolphin, METH_NOARGS, "Check if dolphin is initialized"},
     {nullptr, nullptr, 0, nullptr}  // Sentinel value
 };

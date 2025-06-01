@@ -12,8 +12,5 @@ enum DolphinState {
 DolphinState getDolphinState();
 void setDolphinState(DolphinState state);
 
-int run(std::string gamePath, std::string saveStatePath, bool headLess);
-bool getHasPassed();
-void setHasPassed(bool value);
-bool getIsRunning();
-void stop();
+int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess);
+void stopDolphin();
