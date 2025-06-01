@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
+message("CHECK THIS: ${_ARCH_64} and ${CMAKE_SYSTEM_PROCESSOR}")
+
 project(cdolphin VERSION 0.1)
 
 set(CMAKE_C_STANDARD 99)
