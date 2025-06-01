@@ -79,6 +79,12 @@ jobs:
           sudo apt install libxkbcommon-dev
           sudo apt install libxkbcommon-x11-dev
 
+      - name: Update windows sdk
+        if: matrix.os == 'windows-latest'
+        uses: Lamparter/Install-WindowsSdk@latest
+        with:
+          buildNumber: '22621'
+
 
       - uses: actions/setup-python@v5
         with:
