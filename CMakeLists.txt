@@ -2,9 +2,18 @@ cmake_minimum_required(VERSION 3.13)
 
 project(cdolphin VERSION 0.1)
 
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if (MSVC)
+  if (POLICY CMP0117)
+    # cmake is a weird language. You can't do if(not POLICY)
+  else()
+    message(FATAL_ERROR "Please update to CMake 3.20 or higher.")
+  endif()
+
+  set(CMAKE_C_STANDARD 99)
+  set(CMAKE_CXX_STANDARD 23)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+
 
 
 # Add compiler flags for position-independent code as we're making a python extension
