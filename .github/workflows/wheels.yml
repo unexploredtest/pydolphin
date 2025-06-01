@@ -20,6 +20,8 @@ jobs:
         if: matrix.os == 'ubuntu-24.04' || matrix.os == 'ubuntu-24.04-arm'
         run: |
           sudo apt update && sudo apt upgrade
+          sudo apt install g++-11
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 60
           sudo apt install dolphin # Install packages required by Dolphin
           sudo apt install libxi-dev
           sudo apt install libegl1-mesa-dev
