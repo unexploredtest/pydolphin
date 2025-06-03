@@ -1,4 +1,4 @@
-from pydolphin.dolphin import run, reset, stop
+from pydolphin.dolphin import run, reset, stop, resume, pause
 import pydolphin.controller as controller
 import pydolphin.event as event
 import pydolphin.gui as gui

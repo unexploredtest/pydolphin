@@ -7,6 +7,12 @@ def run(game_path, save_state_path="", head_less=False):
 def stop():
     _cdolphin.stop()
 
+def resume():
+    emulation.resume()
+
+def pause():
+    emulation.pause()
+
 def check_init():
     return _cdolphin.check_init()
 
