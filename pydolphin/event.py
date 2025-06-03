@@ -36,6 +36,9 @@ def on_framedrawn(callback):
 def on_single_framedrawn(callback):
     event.on_single_framedrawn(callback)
 
+def reset():
+    event._dolphin_reset()
+
 
 frameadvance = event_async_creator.create_frameadvance()
 framedrawn = event_async_creator.create_framedrawn()
