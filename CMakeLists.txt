@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.13)
 
 project(cdolphin VERSION 0.1)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 if (MSVC)
+  set(CMAKE_CXX_STANDARD 23)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
   if (POLICY CMP0117)
     # cmake is a weird language. You can't do if(not POLICY)
   else()
@@ -13,6 +14,9 @@ if (MSVC)
   endif()
 
   set(CMAKE_C_STANDARD 99)
+else()
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
 # Add compiler flags for position-independent code as we're making a python extension
