@@ -20,7 +20,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update && sudo apt upgrade
-          sudo apt install dolphin # Install packages required by Dolphin
           sudo apt install libxi-dev
           sudo apt install libegl1-mesa-dev
           sudo apt install ffmpeg
@@ -29,11 +28,6 @@ jobs:
           sudo apt install build-essential
           sudo apt install cmake
           sudo apt install git
-          sudo apt install g++-12 gcc-12
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
-          sudo update-alternatives --config gcc
-          sudo update-alternatives --config g++
           # sudo apt install g++-14
           # sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
           # sudo update-alternatives --config g++
@@ -91,6 +85,13 @@ jobs:
           sudo apt install libxkbcommon-dev
           sudo apt install libxkbcommon-x11-dev
 
+      - name: Setup gcc 12
+        run: |
+          sudo apt install g++-12 gcc-12
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+          sudo update-alternatives --config gcc
+          sudo update-alternatives --config g++
 
       - name: Install python dependencies
         run: |
