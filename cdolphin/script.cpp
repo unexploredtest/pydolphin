@@ -47,6 +47,18 @@ void freeDolphin(void* self) {
     }
 }
 
+// TODO: Find a better way of doing this
+static bool checkBackendName(std::string backendName) {
+    if(backendName == "OGL" || backendName == "Vulkan" || backendName == "default" ||
+        backendName == "Software Rendering" || backendName == "Null" ||
+        backendName == "Metal" || backendName == "D3D" || backendName == "D3D12") {
+        
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Run dolphin, for other functions to work a little has to pass before 
 // everything starts to function
 static PyObject* run(PyObject* self, PyObject* args) {
@@ -55,13 +67,21 @@ static PyObject* run(PyObject* self, PyObject* args) {
     const char* saveStatePath;
     int headLess;
     u32 speedPercent;
+    const char* backendName;
 
-    if (!PyArg_ParseTuple(args, "sspI", &gamePath, &saveStatePath, &headLess, &speedPercent)) {
+    if (!PyArg_ParseTuple(args, "sspIs", &gamePath, &saveStatePath, &headLess, &speedPercent, &backendName)) {
         PyErr_SetString(PyExc_RuntimeError, "Wrong parameters!");
+        return nullptr;
     }
 
     std::string gamePathS(gamePath);
     std::string saveStatePathS(saveStatePath);
+    std::string backendNameS(backendName);
+
+    if(!checkBackendName(backendNameS)) {
+        PyErr_SetString(PyExc_RuntimeError, "Wrong backend name!");
+        return nullptr;
+    }
 
     if(state->dolphinThread != std::nullopt && state->dolphinThread.value().joinable()) {
         PyErr_SetString(PyExc_RuntimeError, "Dolphin already running!");
@@ -72,7 +92,7 @@ static PyObject* run(PyObject* self, PyObject* args) {
         state->dolphinThread.value().join();
     }
 
-    state->dolphinThread = std::thread(runDolphin, gamePathS, saveStatePathS, headLess);
+    state->dolphinThread = std::thread(runDolphin, gamePathS, saveStatePathS, headLess, backendNameS);
     
     while(getDolphinState() == DS_INITING || getDolphinState() == DS_NONE) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

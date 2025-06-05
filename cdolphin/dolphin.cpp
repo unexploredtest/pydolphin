@@ -24,6 +24,7 @@
 #include "Core/DolphinAnalytics.h"
 #include "Core/Host.h"
 #include "Core/System.h"
+#include "Core/Config/MainSettings.h"
 
 #include "UICommon/CommandLineParse.h"
 #ifdef USE_DISCORD_PRESENCE
@@ -230,7 +231,7 @@ static std::unique_ptr<Platform> GetPlatform(const optparse::Values& options, bo
 #define main app_main
 #endif
 
-int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess)
+int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, std::string backendName)
 {
   setDolphinState(DS_INITING);
   int argc;
@@ -367,6 +368,10 @@ int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess)
 #endif
 
   DolphinAnalytics::Instance().ReportDolphinStart("nogui");
+
+  if(backendName != "default") {
+    Config::SetCurrent(Config::MAIN_GFX_BACKEND, backendName);
+  }
 
   if (!BootManager::BootCore(Core::System::GetInstance(), std::move(boot), wsi))
   {
