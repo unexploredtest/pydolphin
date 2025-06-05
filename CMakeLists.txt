@@ -3,16 +3,15 @@ cmake_minimum_required(VERSION 3.13)
 project(cdolphin VERSION 0.1)
 
 if (MSVC)
+  set(CMAKE_C_STANDARD 99)
   set(CMAKE_CXX_STANDARD 23)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   if (POLICY CMP0117)
-    # cmake is a weird language. You can't do if(not POLICY)
   else()
     message(FATAL_ERROR "Please update to CMake 3.20 or higher.")
   endif()
-
-  set(CMAKE_C_STANDARD 99)
 else()
+  # Code relies on C++20
   set(CMAKE_CXX_STANDARD 20)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
