@@ -10,6 +10,8 @@
 #include "Common/Logging/Log.h"
 #include "Common/StringUtil.h"
 
+#include "Core/Config/MainSettings.h"
+
 #include "Scripting/Python/Modules/controllermodule.h"
 #include "Scripting/Python/Modules/doliomodule.h"
 #include "Scripting/Python/Modules/dolphinmodule.h"
@@ -52,8 +54,9 @@ static PyObject* run(PyObject* self, PyObject* args) {
     const char* gamePath;
     const char* saveStatePath;
     int headLess;
+    u32 speedPercent;
 
-    if (!PyArg_ParseTuple(args, "ssp", &gamePath, &saveStatePath, &headLess)) {
+    if (!PyArg_ParseTuple(args, "sspI", &gamePath, &saveStatePath, &headLess, &speedPercent)) {
         PyErr_SetString(PyExc_RuntimeError, "Wrong parameters!");
     }
 
@@ -74,6 +77,9 @@ static PyObject* run(PyObject* self, PyObject* args) {
     while(getDolphinState() == DS_INITING || getDolphinState() == DS_NONE) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+
+    const float speed = float(speedPercent) / 100.0f;
+    Config::SetCurrent(Config::MAIN_EMULATION_SPEED, speed);
   
     return Py_None;
 }
@@ -106,12 +112,26 @@ static PyObject* getIsRunningDolphin(PyObject* self, PyObject* args) {
     return PyBool_FromLong(getDolphinState() != DS_NONE);
 }
 
+static PyObject* changeSpeed(PyObject* self, PyObject* args) {
+    u32 speedPercent;
+
+    if (!PyArg_ParseTuple(args, "I", &speedPercent)) {
+        PyErr_SetString(PyExc_RuntimeError, "Wrong parameters!");
+    }
+
+    const float speed = float(speedPercent) / 100.0f;
+    Config::SetCurrent(Config::MAIN_EMULATION_SPEED, speed);
+  
+    return Py_None;
+}
+
 
 // Method table
 static PyMethodDef DolphinMethods[] = {
     {"run", run, METH_VARARGS, "Run dolphin"},
     {"stop", stop, METH_NOARGS, "Stop dolphin"},
     {"check_init", getIsRunningDolphin, METH_NOARGS, "Check if dolphin is initialized"},
+    {"change_speed", changeSpeed, METH_VARARGS, "Check if dolphin is initialized"},
     {nullptr, nullptr, 0, nullptr}  // Sentinel value
 };
 

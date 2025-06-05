@@ -1,8 +1,8 @@
 import _cdolphin
 from _cdolphin import emulation
 
-def run(game_path, save_state_path="", head_less=False):
-    _cdolphin.run(game_path, save_state_path, head_less)
+def run(game_path, save_state_path="", head_less=False, speed_percent=100):
+    _cdolphin.run(game_path, save_state_path, head_less, speed_percent)
 
 def stop():
     _cdolphin.stop()
@@ -15,6 +15,9 @@ def pause():
 
 def check_init():
     return _cdolphin.check_init()
+
+def change_speed(speed_percent):
+    _cdolphin.change_speed(speed_percent)
 
 def reset():
     emulation.reset()

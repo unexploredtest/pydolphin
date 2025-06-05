@@ -234,15 +234,17 @@ int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess)
 {
   setDolphinState(DS_INITING);
   int argc;
-  char* argv[3];
+  char* argv[4];
   std::string exePath = "dolphinpy.exe";
+  std::string saveStatePrefix = "-s";
 
   argv[0] = exePath.data();
   argv[1] = gamePath.data();
 
   if(saveStatePath.size() > 0) {
-    argc = 3;
-    argv[2] = saveStatePath.data();
+    argc = 4;
+    argv[2] = saveStatePrefix.data();
+    argv[3] = saveStatePath.data();
   } else {
     argc = 2;
   }
