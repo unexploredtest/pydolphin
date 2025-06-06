@@ -12,6 +12,11 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Setup Windows 10 SDK Action
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
+        with:
+          sdk-version: 22621
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
