@@ -227,10 +227,6 @@ static std::unique_ptr<Platform> GetPlatform(const optparse::Values& options, bo
   return nullptr;
 }
 
-#ifdef _WIN32
-#define main app_main
-#endif
-
 int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, std::string backendName)
 {
   setDolphinState(DS_INITING);
@@ -393,18 +389,3 @@ int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, s
   setDolphinState(DS_FINISHED);
   return 0;
 }
-
-#ifdef _WIN32
-int wmain(int, wchar_t*[], wchar_t*[])
-{
-  std::vector<std::string> args = Common::CommandLineToUtf8Argv(GetCommandLineW());
-  const int argc = static_cast<int>(args.size());
-  std::vector<char*> argv(args.size());
-  for (size_t i = 0; i < args.size(); ++i)
-    argv[i] = args[i].data();
-
-  return main(argc, argv.data());
-}
-
-#undef main
-#endif
