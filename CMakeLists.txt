@@ -85,6 +85,11 @@ endif()
 
 set_target_properties(cdolphin PROPERTIES OUTPUT_NAME "_cdolphin")
 
+# Ensure the output is a .pyd file on Windows
+if(WIN32)
+  set_target_properties(cdolphin PROPERTIES SUFFIX ".pyd")
+endif()
+
 target_link_libraries(cdolphin
 PRIVATE
   core
@@ -109,6 +114,14 @@ endif()
 if(MSVC)
   # Add precompiled header
   target_link_libraries(cdolphin PRIVATE use_pch)
+  target_compile_options(cdolphin PRIVATE
+      $<$<CXX_COMPILER_ID:MSVC>:/Zc:__cplusplus>
+      $<$<CXX_COMPILER_ID:MSVC>:/Zc:enumTypes>
+      $<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>
+      $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
+      $<$<CXX_COMPILER_ID:MSVC>:/execution-charset:utf-8>
+      $<$<CXX_COMPILER_ID:MSVC>:/experimental:deterministic>
+  )
 endif()
 
 if(USE_DISCORD_PRESENCE)
