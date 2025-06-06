@@ -17,5 +17,8 @@ Requires Python 3.12+
 
 ### Build
 ```sh
+git clone https://github.com/unexploredtest/pydolphin.git
+cd pydolphin
+git submodule update --init --recursive
 python setup.py install
 ```
