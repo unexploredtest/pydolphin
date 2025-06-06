@@ -1,4 +1,4 @@
-name: Build Wheel
+name: Build Linux Wheel
 
 on: [push, pull_request]
 
