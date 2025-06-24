@@ -1,10 +1,14 @@
-name: Build Linux Wheel
+name: Build Nightly Wheels
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, macos-latest, windows-latest]
 
     steps:
       - name: Checkout code
@@ -17,7 +21,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
+      - name: Setup Windows 10 SDK Action
+        if: runner.os == 'Windows'
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
+        with:
+          sdk-version: 22621
+
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
         run: |
           sudo apt update && sudo apt upgrade
           sudo apt install libxi-dev
@@ -79,6 +90,7 @@ jobs:
           sudo apt install libxkbcommon-x11-dev
 
       - name: Setup gcc 12
+        if: runner.os == 'Linux'
         run: |
           sudo apt install g++-12 gcc-12
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
@@ -93,10 +105,10 @@ jobs:
 
       - name: Build Wheel
         run: |
-          python setup.py bdist_wheel
+          python setup.py bdist_wheel -DCMAKE_SYSTEM_VERSION="10.0.22621.0" -DSKIP_POSTPROCESS_BUNDLE=ON
 
       - name: Upload Wheel
         uses: actions/upload-artifact@v4
         with:
-          name: wheel
+          name: wheel-${{ runner.os }}
           path: dist/*.whl
