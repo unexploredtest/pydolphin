@@ -85,9 +85,11 @@ endif()
 
 set_target_properties(cdolphin PROPERTIES OUTPUT_NAME "_cdolphin")
 
-# Ensure the output is a .pyd file on Windows
+# Ensure we have the appropriate suffix for python
 if(WIN32)
   set_target_properties(cdolphin PROPERTIES SUFFIX ".pyd")
+elseif(APPLE)
+  set_target_properties(cdolphin PROPERTIES SUFFIX ".so")
 endif()
 
 target_link_libraries(cdolphin
