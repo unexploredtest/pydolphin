@@ -105,10 +105,10 @@ jobs:
 
       - name: Build Wheel
         run: |
-          python setup.py bdist_wheel -DCMAKE_SYSTEM_VERSION="10.0.22621.0"
+          python setup.py bdist_wheel -DCMAKE_SYSTEM_VERSION="10.0.22621.0" -DSKIP_POSTPROCESS_BUNDLE=ON
 
       - name: Upload Wheel
         uses: actions/upload-artifact@v4
         with:
-          name: wheel
+          name: wheel-${{ runner.os }}
           path: dist/*.whl
