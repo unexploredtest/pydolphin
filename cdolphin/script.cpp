@@ -92,6 +92,8 @@ static PyObject* run(PyObject* self, PyObject* args) {
         state->dolphinThread.value().join();
     }
 
+    initPlatform();
+
     state->dolphinThread = std::thread(runDolphin, gamePathS, saveStatePathS, headLess, backendNameS);
     
     while(getDolphinState() == DS_INITING || getDolphinState() == DS_NONE) {

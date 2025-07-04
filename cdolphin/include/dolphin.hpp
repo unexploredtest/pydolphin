@@ -13,4 +13,5 @@ DolphinState getDolphinState();
 void setDolphinState(DolphinState state);
 
 int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, std::string backendName);
+void initPlatform();
 void stopDolphin();

@@ -227,6 +227,11 @@ static std::unique_ptr<Platform> GetPlatform(const optparse::Values& options, bo
   return nullptr;
 }
 
+void initPlatform() {
+  s_platform = Platform::CreateX11Platform();
+  s_platform->Init();
+}
+
 int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, std::string backendName)
 {
   setDolphinState(DS_INITING);
@@ -321,12 +326,12 @@ int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, s
   if (options.is_set("user"))
     user_directory = static_cast<const char*>(options.get("user"));
 
-  s_platform = GetPlatform(options, headLess);
-  if (!s_platform || !s_platform->Init())
-  {
-    fprintf(stderr, "No platform found, or failed to initialize.\n");
-    return 1;
-  }
+  // s_platform = GetPlatform(options, headLess);
+  // if (!s_platform || !s_platform->Init())
+  // {
+  //   fprintf(stderr, "No platform found, or failed to initialize.\n");
+  //   return 1;
+  // }
 
   const WindowSystemInfo wsi = s_platform->GetWindowSystemInfo();
 
