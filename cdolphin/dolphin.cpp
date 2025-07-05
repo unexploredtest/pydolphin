@@ -227,7 +227,7 @@ static std::unique_ptr<Platform> GetPlatform(const optparse::Values& options, bo
   return nullptr;
 }
 
-int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, std::string backendName)
+int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, std::string backendName, bool useDualCore)
 {
   setDolphinState(DS_INITING);
   int argc;
@@ -368,6 +368,7 @@ int runDolphin(std::string gamePath, std::string saveStatePath, bool headLess, s
   if(backendName != "default") {
     Config::SetCurrent(Config::MAIN_GFX_BACKEND, backendName);
   }
+  Config::SetCurrent(Config::MAIN_CPU_THREAD, useDualCore);
 
   if (!BootManager::BootCore(Core::System::GetInstance(), std::move(boot), wsi))
   {

@@ -3,7 +3,7 @@ Functions related to running Dolphin
 """
 
 
-def run(game_path: str, save_state_path: str = "", head_less: bool = False, speed_percent: int = 0, backend: str = "default") -> None:
+def run(game_path: str, save_state_path: str = "", head_less: bool = False, speed_percent: int = 0, backend: str = "default", use_dual_core: bool = False) -> None:
     """
     Runs Dolphin
 

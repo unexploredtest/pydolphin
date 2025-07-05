@@ -68,8 +68,9 @@ static PyObject* run(PyObject* self, PyObject* args) {
     int headLess;
     u32 speedPercent;
     const char* backendName;
+    int useDualCore;
 
-    if (!PyArg_ParseTuple(args, "sspIs", &gamePath, &saveStatePath, &headLess, &speedPercent, &backendName)) {
+    if (!PyArg_ParseTuple(args, "sspIsp", &gamePath, &saveStatePath, &headLess, &speedPercent, &backendName, &useDualCore)) {
         PyErr_SetString(PyExc_RuntimeError, "Wrong parameters!");
         return nullptr;
     }
@@ -92,7 +93,7 @@ static PyObject* run(PyObject* self, PyObject* args) {
         state->dolphinThread.value().join();
     }
 
-    state->dolphinThread = std::thread(runDolphin, gamePathS, saveStatePathS, headLess, backendNameS);
+    state->dolphinThread = std::thread(runDolphin, gamePathS, saveStatePathS, headLess, backendNameS, useDualCore);
     
     while(getDolphinState() == DS_INITING || getDolphinState() == DS_NONE) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
