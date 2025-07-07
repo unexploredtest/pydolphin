@@ -5,6 +5,7 @@ import sys
 from pprint import pprint
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
+from pathlib import Path
 
 c_module_name = '_cdolphin'
 
@@ -62,11 +63,13 @@ class CMakeBuild(build_ext):
                 '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
             ]
 
-            if(platform.system() == 'Linux'):
-                current_directory = os.getcwd()
+            current_directory = Path.cwd()
+            build_python_file = current_directory / "build_python.txt"
+
+            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF" or build_python_file.is_file()):
                 python_version = f'{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}'
                 
-                if not os.path.isdir(current_directory + f"/Python-{python_version}"):
+                if not os.path.isdir(current_directory / f"Python-{python_version}"):
                     subprocess.check_call(['bash', 'scripts/build_python.sh', python_version])
                 cmake_args.append(f'-DPython3_LIBRARIES={current_directory}/Python-{python_version}/libpython3.{sys.version_info[1]}.a')
                 cmake_args.append(f'-DPython3_INCLUDE_DIRS={current_directory}/Python-{python_version}/Include;{current_directory}/Python-{python_version}')
