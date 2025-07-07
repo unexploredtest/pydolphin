@@ -62,15 +62,7 @@ class CMakeBuild(build_ext):
                 '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
             ]
 
-            is_ciwheelbuild = False
-            try:
-                import cibuildwheel
-                if(platform.system() == 'Linux'):
-                    is_ciwheelbuild = True
-            except:
-                pass
-
-            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF" or is_ciwheelbuild):
+            if(platform.system() == 'Linux'):
                 current_directory = os.getcwd()
                 python_version = f'{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}'
                 
