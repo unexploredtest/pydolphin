@@ -8,10 +8,10 @@ fi
 
 VERSION=$1
 
-wget -O Python.tgz https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tgz
-tar xzf Python.tgz
-mv Python-$VERSION Python
-cd Python
+wget https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tgz
+tar xzf Python-$VERSION.tgz
+# mv Python-$VERSION Python
+cd Python-$VERSION
 ./configure CFLAGS="-fPIC" LDFLAGS="-fPIC" --enable-shared
 make altinstall
 
