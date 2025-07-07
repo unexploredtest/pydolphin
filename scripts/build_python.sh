@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Check if version argument is provided
+if [ -z "$1" ]; then
+  echo "Usage: $0 <version>"
+  exit 1
+fi
+
+VERSION=$1
+
+wget -O Python.tgz https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tgz
+tar xzf Python.tgz
+mv Python-$VERSION Python
+cd Python
+./configure CFLAGS="-fPIC" LDFLAGS="-fPIC" --enable-shared
+make -j$(nproc)
