@@ -9,7 +9,7 @@ fi
 VERSION=$1
 
 wget -O Python.tgz https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tgz
-tar xzf Python-$VERSION.tgz
+tar xzf Python.tgz
 mv Python-$VERSION Python
 cd Python
 ./configure CFLAGS="-fPIC" LDFLAGS="-fPIC" --enable-shared

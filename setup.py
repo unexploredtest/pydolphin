@@ -64,9 +64,10 @@ class CMakeBuild(build_ext):
 
             if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF"):
                 current_directory = os.getcwd()
-                python_version = f'{sys.version_info[0].sys.version_info[1].sys.version_info[2]}'
+                python_version = f'{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}'
                 
-                subprocess.check_call(['bash', 'scripts/build_python.sh', python_version])
+                if not os.path.isdir(current_directory + "/Python"):
+                    subprocess.check_call(['bash', 'scripts/build_python.sh', python_version])
                 cmake_args.append(f'-DPython3_LIBRARIES="{current_directory}/Python/libpython3.{sys.version_info[1]}.a"')
                 cmake_args.append(f'-DPython3_INCLUDE_DIRS="{current_directory}/Python/Include;{current_directory}/Python"')
 
