@@ -89,6 +89,12 @@ class CMakeBuild(build_ext):
                         '-G', 'MinGW Makefiles',
                     ]
 
+                cibuildwheel_windows = current_directory / "ci_win.txt"
+
+                if(cibuildwheel_windows.is_file()):
+                    cmake_args.append('-DCMAKE_SYSTEM_VERSION=10.0.22621.0')
+
+
             cmake_args += cmake_cmd_args
 
             pprint(cmake_args)
