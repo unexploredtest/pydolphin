@@ -17,9 +17,11 @@ jobs:
           submodules: 'recursive'
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: |
+              3.12
+              3.13
 
       - name: Setup Windows 10 SDK Action
         if: runner.os == 'Windows'
@@ -41,7 +43,6 @@ jobs:
           CIBW_BEFORE_ALL_LINUX:  >
             touch build_python.txt && dnf -y update && dnf install -y wget openssl-devel bzip2-devel libffi-devel libXi-devel systemd-devel libevdev-devel libXrandr-devel
           CIBW_BEFORE_ALL_WINDOWS: "echo. > ci_win.txt"
-          CIBW_BEFORE_ALL_MACOS: "brew update && brew install python@3.12 && brew install python@3.13"
 
       - uses: actions/upload-artifact@v4
         with:
