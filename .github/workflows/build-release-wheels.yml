@@ -37,7 +37,7 @@ jobs:
           CIBW_BUILD: cp312-* cp313-*
           CIBW_MANYLINUX_X86_64_IMAGE: 'manylinux_2_28'
           CIBW_MANYLINUX_AARCH64_IMAGE: 'manylinux_2_28'
-          CIBW_SKIP: "linux_musllinux_x86_64;linux_musllinux_aarch64"
+          CIBW_SKIP: "*musllinux*"
           CIBW_BEFORE_ALL_LINUX:  >
             touch build_python.txt && dnf -y update && dnf install -y wget openssl-devel bzip2-devel libffi-devel libXi-devel systemd-devel libevdev-devel libXrandr-devel
 
