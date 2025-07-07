@@ -62,6 +62,14 @@ class CMakeBuild(build_ext):
                 '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
             ]
 
+            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF"):
+                current_directory = os.getcwd()
+                python_version = f'{sys.version_info[0].sys.version_info[1].sys.version_info[2]}'
+                
+                subprocess.check_call(['bash', 'scripts/build_python.sh', python_version])
+                cmake_args.append(f'-DPython3_LIBRARIES="{current_directory}/Python/libpython3.{sys.version_info[1]}.a"')
+                cmake_args.append(f'-DPython3_INCLUDE_DIRS="{current_directory}/Python/Include;{current_directory}/Python"')
+
             if platform.system() == 'Windows':
                 plat = ('x64' if platform.architecture()[0] == '64bit' else 'Win32')
                 cmake_args += [
