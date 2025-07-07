@@ -43,7 +43,9 @@ jobs:
           CIBW_BEFORE_ALL_LINUX:  >
             touch build_python.txt && dnf -y update && dnf install -y wget openssl-devel bzip2-devel libffi-devel libXi-devel systemd-devel libevdev-devel libXrandr-devel
           CIBW_BEFORE_ALL_WINDOWS: "echo. > ci_win.txt"
+          CIBW_ENVIRONMENT_LINUX: 'PYDOLPHIN_BUILD_PYTHON="ON"'
           CIBW_ENVIRONMENT_MACOS: 'MACOSX_DEPLOYMENT_TARGET=14.0'
+          CIBW_ENVIRONMENT_WINDOWS: 'PYDOLPHIN_NEWER_CMAKE="ON"'
 
       - uses: actions/upload-artifact@v4
         with:

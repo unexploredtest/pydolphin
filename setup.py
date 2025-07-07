@@ -63,10 +63,10 @@ class CMakeBuild(build_ext):
                 '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
             ]
 
-            current_directory = Path.cwd()
-            build_python_file = current_directory / "build_python.txt"
+            # current_directory = Path.cwd()
+            # build_python_file = current_directory / "build_python.txt"
 
-            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF" or build_python_file.is_file()):
+            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF"):
                 python_version = f'{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}'
                 
                 if not os.path.isdir(current_directory / f"Python-{python_version}"):
@@ -89,9 +89,9 @@ class CMakeBuild(build_ext):
                         '-G', 'MinGW Makefiles',
                     ]
 
-                cibuildwheel_windows = current_directory / "ci_win.txt"
+                # cibuildwheel_windows = current_directory / "ci_win.txt"
 
-                if(cibuildwheel_windows.is_file()):
+                if(_get_env_variable('PYDOLPHIN_NEWER_CMAKE') != "OFF"):
                     cmake_args.append('-DCMAKE_SYSTEM_VERSION=10.0.22621.0')
 
 
