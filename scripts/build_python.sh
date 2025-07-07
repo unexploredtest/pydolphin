@@ -13,4 +13,6 @@ tar xzf Python.tgz
 mv Python-$VERSION Python
 cd Python
 ./configure CFLAGS="-fPIC" LDFLAGS="-fPIC" --enable-shared
+make altinstall
+
 make -j$(nproc)
