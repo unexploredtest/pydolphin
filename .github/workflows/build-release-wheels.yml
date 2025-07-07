@@ -1,0 +1,44 @@
+name: Build Release Wheels
+
+on: [push, pull_request, workflow_dispatch, release]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Setup Windows 10 SDK Action
+        if: runner.os == 'Windows'
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
+        with:
+          sdk-version: 22621
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_ARCHS: 'auto64'
+          CIBW_BUILD: cp312-* cp313-*
+          CIBW_MANYLINUX_X86_64_IMAGE: 'manylinux_2_28'
+          CIBW_MANYLINUX_AARCH64_IMAGE: 'manylinux_2_28'
+          CIBW_BEFORE_ALL_LINUX:  >
+            export PYDOLPHIN_BUILD_PYTHON="ON" && dnf -y update && dnf install -y openssl-devel bzip2-devel libffi-devel libXi-devel systemd-devel libevdev-devel libXrandr-devel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
+
