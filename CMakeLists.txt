@@ -41,8 +41,13 @@ if(ENABLE_X11)
   endif()
 endif()
 
-# Find Python
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+# Check if the required Python3 variables are set
+if(NOT DEFINED Python3_LIBRARIES OR
+   NOT DEFINED Python3_INCLUDE_DIRS)
+   
+    # If any of the variables are not set, find Python3
+    find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+endif()
 
 # Include Python headers
 include_directories(${Python3_INCLUDE_DIRS})
