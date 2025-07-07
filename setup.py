@@ -66,7 +66,7 @@ class CMakeBuild(build_ext):
             # current_directory = Path.cwd()
             # build_python_file = current_directory / "build_python.txt"
 
-            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF"):
+            if(_get_env_variable('CIBUILDWHEEL') != "OFF" and platform.system() == 'Linux'):
                 python_version = f'{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}'
                 
                 if not os.path.isdir(current_directory / f"Python-{python_version}"):
@@ -91,7 +91,7 @@ class CMakeBuild(build_ext):
 
                 # cibuildwheel_windows = current_directory / "ci_win.txt"
 
-                if(_get_env_variable('PYDOLPHIN_NEWER_CMAKE') != "OFF"):
+                if(_get_env_variable('CIBUILDWHEEL') != "OFF"):
                     cmake_args.append('-DCMAKE_SYSTEM_VERSION=10.0.22621.0')
 
 
