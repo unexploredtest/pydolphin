@@ -68,8 +68,8 @@ class CMakeBuild(build_ext):
                 
                 if not os.path.isdir(current_directory + "/Python"):
                     subprocess.check_call(['bash', 'scripts/build_python.sh', python_version])
-                cmake_args.append(f'-DPython3_LIBRARIES="{current_directory}/Python/libpython3.{sys.version_info[1]}.a"')
-                cmake_args.append(f'-DPython3_INCLUDE_DIRS="{current_directory}/Python/Include;{current_directory}/Python"')
+                cmake_args.append(f'-DPython3_LIBRARIES={current_directory}/Python/libpython3.{sys.version_info[1]}.a')
+                cmake_args.append(f'-DPython3_INCLUDE_DIRS={current_directory}/Python/Include;{current_directory}/Python')
 
             if platform.system() == 'Windows':
                 plat = ('x64' if platform.architecture()[0] == '64bit' else 'Win32')
