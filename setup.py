@@ -91,7 +91,7 @@ class CMakeBuild(build_ext):
 
                 cibuildwheel_windows = current_directory / "ci_win.txt"
 
-                if(_get_env_variable('CIBUILDWHEEL') != "OFF"):
+                if(os.environ.get('CIBUILDWHEEL', '0') == '1'):
                     cmake_args.append('-DCMAKE_SYSTEM_VERSION=10.0.22621.0')
 
 
