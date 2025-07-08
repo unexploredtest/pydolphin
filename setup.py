@@ -5,6 +5,7 @@ import sys
 from pprint import pprint
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
+from pathlib import Path
 
 c_module_name = '_cdolphin'
 
@@ -62,14 +63,16 @@ class CMakeBuild(build_ext):
                 '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
             ]
 
-            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF"):
-                current_directory = os.getcwd()
+            current_directory = Path.cwd()
+            build_python_file = current_directory / "build_python.txt"
+
+            if(_get_env_variable('PYDOLPHIN_BUILD_PYTHON') != "OFF" or build_python_file.is_file()):
                 python_version = f'{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}'
                 
-                if not os.path.isdir(current_directory + "/Python"):
+                if not os.path.isdir(current_directory / f"Python-{python_version}"):
                     subprocess.check_call(['bash', 'scripts/build_python.sh', python_version])
-                cmake_args.append(f'-DPython3_LIBRARIES={current_directory}/Python/libpython3.{sys.version_info[1]}.a')
-                cmake_args.append(f'-DPython3_INCLUDE_DIRS={current_directory}/Python/Include;{current_directory}/Python')
+                cmake_args.append(f'-DPython3_LIBRARIES={current_directory}/Python-{python_version}/libpython3.{sys.version_info[1]}.a')
+                cmake_args.append(f'-DPython3_INCLUDE_DIRS={current_directory}/Python-{python_version}/Include;{current_directory}/Python-{python_version}')
 
             if platform.system() == 'Windows':
                 plat = ('x64' if platform.architecture()[0] == '64bit' else 'Win32')
@@ -85,6 +88,11 @@ class CMakeBuild(build_ext):
                     cmake_args += [
                         '-G', 'MinGW Makefiles',
                     ]
+
+                cibuildwheel_windows = current_directory / "ci_win.txt"
+
+                if(os.environ.get('CIBUILDWHEEL', '0') == '1'):
+                    cmake_args.append('-DCMAKE_SYSTEM_VERSION=10.0.22621.0')
 
             cmake_args += cmake_cmd_args
 
